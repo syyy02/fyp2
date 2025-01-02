@@ -1,13 +1,9 @@
 import cv2
 import streamlit as st
 import streamlit_option_menu
-from streamlit_option_menu import option_menu
-from PIL import Image
 import numpy as np
 from ultralytics import YOLO
-from PIL import Image, ImageDraw, ImageFont, ExifTags
-import tensorflow as tf
-import tensorflow as tf
+from PIL import Image, ExifTags
 from tensorflow.keras.models import load_model
 import pandas as pd
 

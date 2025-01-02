@@ -1,0 +1,8 @@
+opencv-python
+streamlit
+streamlit-option-menu
+numpy
+ultralytics
+Pillow
+tensorflow
+pandas
