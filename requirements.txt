@@ -44,7 +44,7 @@ optree==0.13.0
 packaging==24.1
 pandas==2.2.3
 pillow==10.4.0
-protobuf==5.28.3
+protobuf
 psutil==6.1.0
 py-cpuinfo==9.0.0
 pyarrow==18.0.0
