@@ -17,7 +17,7 @@ if selected == "Home":
     #st.image("C:\\Users\\user\\Downloads\\home.jpg", user_column_width =True)
     col1, col2 ,col3= st.columns([1,3,1])
     with col2:
-        st.image("C:\\Users\\user\\Downloads\\home.jpg", use_column_width=True)
+        st.image("images/home.jpg", use_column_width=True)
 
     # Styling with Markdown
     st.markdown("""
