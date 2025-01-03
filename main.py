@@ -108,8 +108,10 @@ if selected == "Intraoral Assessment":
                             label = class_names[class_id]
                             color = class_colors.get(label, (255, 255, 255))
 
-                            draw.rectangle([x_min, y_min, x_max, y_max], outline=color, width=2)
-                            draw.text((x_min, y_min - 10), label, fill=color)
+                            draw.rectangle([x_min, y_min, x_max, y_max], outline=color, width=3)
+                            font_size =40
+                            font = ImageFont.truetype("arial.ttf", font_size)
+                            draw.text((x_min+2, y_min - 10), label, fill=color,font=font )
 
                 if detected:
                     st.image(intra_image, caption="Predicted Image with Bounding Boxes", use_column_width=True)
@@ -208,24 +210,28 @@ if selected == "Intraoral Assessment":
                                 best_molar_box = (x1, y1, x2, y2)
 
                     # Draw bounding boxes and text using Pillow
-                    font = ImageFont.load_default()
+                    #font = ImageFont.load_default()
+                    font_size = 40
+                    font = ImageFont.truetype("arial.ttf", font_size)
 
                     if best_canine_box:
                         x1, y1, x2, y2 = best_canine_box
-                        draw.rectangle([x1, y1, x2, y2], outline="red", width=2)  # Red box
-                        draw.text((x1, y1 - 10), f"{detected_classes['Canine']} ({max_confidence_canine:.2f})",
-                                  fill="red", font=font)
+                        draw.rectangle([x1, y1, x2, y2], outline="green", width=3)  # Red box
+                        draw.text((x1, y1 - 10), f"{detected_classes['Canine']} ",
+                                  fill="green", font=font)
 
                     if best_molar_box:
                         x1, y1, x2, y2 = best_molar_box
-                        draw.rectangle([x1, y1, x2, y2], outline="green", width=2)  # Green box
-                        draw.text((x1, y1 - 10), f"{detected_classes['Molar']} ({max_confidence_molar:.2f})",
-                                  fill="green", font=font)
+                        draw.rectangle([x1, y1, x2, y2], outline="yellow", width=3)  # Green box
+                        draw.text((x1, y1 - 10), f"{detected_classes['Molar']}",
+                                  fill="yellow", font=font)
+
 
                     # Display the image with bounding boxes
                     rcol1, rcol2, rcol3 = st.columns([2, 3, 1])
                     with rcol2:
-                        st.image(detected_image, caption="Detected Image with Bounding Boxes", width=500)
+                        st.image(detected_image, caption="Detected Image with Bounding Boxes", width=800)
+                        #st.image(enlarged_image, caption="Detected Image with Bounding Boxes", use_column_width=True)
 
                 # Output detected classes with styling
                 st.markdown("## 🦷 **Detected Classes：**")
