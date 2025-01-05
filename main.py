@@ -319,6 +319,7 @@ if selected == "Extraoral Assessment":
     model = load_trained_model()
 
     if uploaded_file is not None:
+
         corrected_image = load_and_correct_image(uploaded_file)
         st.toast("Classifying...")
 
@@ -329,6 +330,7 @@ if selected == "Extraoral Assessment":
                 st.image(corrected_image, caption="Uploaded Image", width=500)
 
             # Preprocess the image
+            corrected_image = corrected_image.convert('RGB')
             image = preprocess_image(corrected_image)
 
             if image is not None:
