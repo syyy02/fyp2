@@ -122,8 +122,8 @@ if selected == "Intraoral Assessment":
     with sub_intraselected[1]:
         # Streamlit app title
         st.title("Angle's Classification")
-        st.session_state.angle_classification_action = True
-        st.session_state.classification_tooth_action = False
+        #st.session_state.angle_classification_action = True
+        #st.session_state.classification_tooth_action = False
 
         # Load the YOLO model with the custom weights
         # model = YOLO("C:\\Users\\user\\Downloads\\best.pt")
@@ -153,6 +153,8 @@ if selected == "Intraoral Assessment":
         if uploaded_file:
             # Load the image
             image = Image.open(uploaded_file)
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
             in_on = st.toggle("Show picture")
             if in_on:
                 icol1, icol2, icol3 = st.columns([2, 3, 1])
@@ -290,7 +292,10 @@ if selected == "Extraoral Assessment":
                     image = image.rotate(270, expand=True)
                 elif orientation_value == 8:
                     image = image.rotate(90, expand=True)
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
             return image
+
         except Exception as e:
             st.error("Error loading image.")
             print("Error:", e)
@@ -330,10 +335,11 @@ if selected == "Extraoral Assessment":
                 st.image(corrected_image, caption="Uploaded Image", width=500)
 
             # Preprocess the image
-            corrected_image = corrected_image.convert('RGB')
+            #corrected_image = corrected_image.convert('RGB')
             image = preprocess_image(corrected_image)
 
             if image is not None:
+
                 # Get predictions
                 predicted_class, predictions = predict_class(model, image)
 
