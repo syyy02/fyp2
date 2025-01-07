@@ -110,7 +110,7 @@ if selected == "Intraoral Assessment":
 
                             draw.rectangle([x_min, y_min, x_max, y_max], outline=color, width=3)
                             font_size =40
-                            font = ImageFont.truetype("arial.ttf", font_size)
+                            font = ImageFont.truetype("font/arial.ttf", font_size)
                             draw.text((x_min+2, y_min - 10), label, fill=color,font=font )
 
                 if detected:
@@ -214,7 +214,7 @@ if selected == "Intraoral Assessment":
                     # Draw bounding boxes and text using Pillow
                     #font = ImageFont.load_default()
                     font_size = 40
-                    font = ImageFont.truetype("arial.ttf", font_size)
+                    font = ImageFont.truetype("font/arial.ttf", font_size)
 
                     if best_canine_box:
                         x1, y1, x2, y2 = best_canine_box
