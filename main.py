@@ -114,7 +114,9 @@ if selected == "Intraoral Assessment":
                             draw.text((x_min+2, y_min - 10), label, fill=color,font=font )
 
                 if detected:
-                    st.image(intra_image, caption="Predicted Image with Bounding Boxes", use_column_width=True)
+                    ocol1, ocol2, ocol3 = st.columns([1, 3, 1])
+                    with ocol2:
+                        st.image(intra_image, caption="Predicted Image with Bounding Boxes", use_column_width=True)
                 else:
                     st.warning("⚠️ No teeth detected (incisor, canine, molar, or premolar). Please upload a valid image.")
             else:
