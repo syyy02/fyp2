@@ -92,7 +92,7 @@ if selected == "Intraoral Assessment":
             if intra_on:
                 intra_image = Image.open(intra_uploaded_file)
                 st.image(intra_image, caption="Uploaded Image", width=500)
-        if st.button("Classify Tooth"):
+        if st.button("Classify Teeth"):
             if intra_uploaded_file is not None:
                 intra_image = Image.open(intra_uploaded_file).convert("RGB")
                 results = model(intra_image)
