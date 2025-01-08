@@ -8,7 +8,7 @@ import pandas as pd
 
 st.set_page_config(layout="wide")
 with st.sidebar:
-    selected = streamlit_option_menu.option_menu(menu_title="Main Menu", options=["Home", "Intraoral Assessment", "Extraoral Assessment"], menu_icon="cast", default_index=0)
+    selected = streamlit_option_menu.option_menu(menu_title="Main Menu", options=["Home", "Intraoral Classification", "Extraoral Classification"], menu_icon="cast", default_index=0)
 
 if selected == "Home":
     col1, col2, col3 = st.columns([1, 3, 1])
@@ -70,7 +70,7 @@ if selected == "Home":
         <div class="note"><strong>Note:</strong> The system is trained using RGB images only.</div>
         """, unsafe_allow_html=True)
 
-if selected == "Intraoral Assessment":
+if selected == "Intraoral Classification":
     sub_intraselected = st.tabs(["Classification of Teeth", "Angle's Classification"])
 
     with sub_intraselected[0]:
@@ -286,7 +286,7 @@ if selected == "Intraoral Assessment":
                         st.markdown("<span style='color: #FF4B4B; font-weight: bold;'>❌ Molar: Not detected</span>",
                                     unsafe_allow_html=True)
 
-if selected == "Extraoral Assessment":
+if selected == "Extraoral Classification":
     st.title("🧑‍⚕️Extraoral Orthodontic Images Classification👩‍⚕️")
 
     # Load the pre-trained model
