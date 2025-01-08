@@ -86,12 +86,14 @@ if selected == "Intraoral Assessment":
             "premolar": (0, 255, 255)
         }
 
-        intra_uploaded_file = st.file_uploader("Choose a frontal view of intraoral image:", type=["jpg", "jpeg", "png"])
+        intra_uploaded_file = st.file_uploader("Please upload a frontal/upper/lower view of intraoral image:", type=["jpg", "jpeg", "png"])
         if intra_uploaded_file:
             intra_on = st.toggle("Show image")
             if intra_on:
                 intra_image = Image.open(intra_uploaded_file)
-                st.image(intra_image, caption="Uploaded Image", width=500)
+                incol1, incol2, incol3 = st.columns([2, 3, 1])
+                with incol2:
+                    st.image(intra_image, caption="Uploaded Image", width=600)
         if st.button("Classify Teeth"):
             if intra_uploaded_file is not None:
                 intra_image = Image.open(intra_uploaded_file).convert("RGB")
@@ -114,13 +116,27 @@ if selected == "Intraoral Assessment":
                             draw.text((x_min+2, y_min - 10), label, fill=color,font=font )
 
                 if detected:
-                    ocol1, ocol2, ocol3 = st.columns([1, 3, 1])
+                    ocol1, ocol2, ocol3 = st.columns([2, 3, 1])
                     with ocol2:
-                        st.image(intra_image, caption="Predicted Image with Bounding Boxes", use_column_width=True)
+                        st.image(intra_image, caption="Predicted Image with Bounding Boxes", width=600)
+                    import streamlit as st
+
+                    # Use Markdown with HTML for centered, colored text
+                    st.markdown("""
+                    <div style="text-align: center;">
+                        <h3>Color Coding for Teeth Classification:</h3>
+                        <p><span style="color:green"><strong>Green</strong></span>: Incisor</p>
+                        <p><span style="color:red"><strong>Red</strong></span>: Canine</p>
+                        <p><span style="color:cyan"><strong>Cyan</strong></span>: Premolar</p>
+                        <p><span style="color:blue"><strong>Blue</strong></span>: Molar</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
                 else:
                     st.warning("⚠️ No teeth detected (incisor, canine, molar, or premolar). Please upload a valid image.")
             else:
                 st.warning("⚠️ Please upload a frontal view of the intraoral image to perform classification.")
+
     with sub_intraselected[1]:
         # Streamlit app title
         st.title("Angle's Classification")
@@ -234,7 +250,7 @@ if selected == "Intraoral Assessment":
                     # Display the image with bounding boxes
                     rcol1, rcol2, rcol3 = st.columns([2, 3, 1])
                     with rcol2:
-                        st.image(detected_image, caption="Detected Image with Bounding Boxes", width=800)
+                        st.image(detected_image, caption="Detected Image with Bounding Boxes", width=600)
                         #st.image(enlarged_image, caption="Detected Image with Bounding Boxes", use_column_width=True)
 
                 # Output detected classes with styling
