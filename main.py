@@ -140,12 +140,9 @@ if selected == "Intraoral Classification":
     with sub_intraselected[1]:
         # Streamlit app title
         st.title("Angle's Classification")
-        #st.session_state.angle_classification_action = True
-        #st.session_state.classification_tooth_action = False
+
 
         # Load the YOLO model with the custom weights
-        # model = YOLO("C:\\Users\\user\\Downloads\\best.pt")
-        #model = YOLO("C:\\Users\\user\\Downloads\\result_yolov8l_2x_overfit\\detect\\train2\\\weights\\best.pt")
         model = YOLO("model/cnm_best.pt")
 
         # Define the class names manually from your data.yaml
@@ -331,11 +328,17 @@ if selected == "Extraoral Classification":
         return image
 
     # Predict class and probabilities
-    def predict_class(model, image):
+    # Predict class and probabilities
+    def predict_class(model, image, threshold=0.5):
         predictions = model.predict(image)
-        predicted_class = np.argmax(predictions, axis=1)
+        max_probability = np.max(predictions)
+        predicted_class_index = np.argmax(predictions, axis=1)
         extraoral_class_names = ['Class I', 'Class II', 'Class III']
-        return extraoral_class_names[predicted_class[0]], predictions
+
+        if max_probability < threshold:
+            return None, predictions  # No confident class detected
+        return extraoral_class_names[predicted_class_index[0]], predictions
+
 
     # File uploader
     uploaded_file = st.file_uploader("Upload an image of a lateral view", type=["jpg", "jpeg", "png"])
@@ -361,24 +364,32 @@ if selected == "Extraoral Classification":
                 # Get predictions
                 predicted_class, predictions = predict_class(model, image)
 
-                # Display the predicted class
-                st.markdown(
-                    f"<h3 style='text-align: center;'>Predicted Class: <span style='color: green;'>{predicted_class}</span></h3>",
-                    unsafe_allow_html=True,
-                )
+                if predicted_class is None:
+                    # Display error message for irrelevant images
+                    st.error("No confident class detected. Please ensure the image is relevant and clear.")
+                else:
+                    # Display the predicted class
+                    st.markdown(
+                        f"<h3 style='text-align: center;'>Predicted Class: <span style='color: green;'>{predicted_class}</span></h3>",
+                        unsafe_allow_html=True,
+                    )
 
-                # Visualize probabilities
-                st.markdown("<h4 style='text-align: center;'>Prediction Probabilities:</h4>", unsafe_allow_html=True)
-                extraoral_class_names = ['Class I', 'Class II', 'Class III']
-                probabilities = {class_name: prob for class_name, prob in zip(extraoral_class_names, predictions[0])}
+                    # Visualize probabilities
+                    st.markdown("<h4 style='text-align: center;'>Prediction Probabilities:</h4>",
+                                unsafe_allow_html=True)
+                    extraoral_class_names = ['Class I', 'Class II', 'Class III']
+                    probabilities = {class_name: prob for class_name, prob in
+                                     zip(extraoral_class_names, predictions[0])}
 
-                # Display as a bar chart
-                st.bar_chart(pd.DataFrame(probabilities.values(), index=probabilities.keys(), columns=["Probability"]))
+                    # Display as a bar chart
+                    st.bar_chart(
+                        pd.DataFrame(probabilities.values(), index=probabilities.keys(), columns=["Probability"]))
 
-                # Display plain text for probabilities
-                st.markdown("<h4 style='text-align: left;'>Probability Breakdown:</h4>", unsafe_allow_html=True)
-                for class_name, probability in probabilities.items():
-                    st.markdown(f"- **{class_name}**: {probability:.2f}")
+                    # Display plain text for probabilities
+                    st.markdown("<h4 style='text-align: left;'>Probability Breakdown:</h4>", unsafe_allow_html=True)
+                    for class_name, probability in probabilities.items():
+                        st.markdown(f"- **{class_name}**: {probability:.2f}")
+
 
 
 
