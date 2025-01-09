@@ -133,9 +133,9 @@ if selected == "Intraoral Classification":
                     """, unsafe_allow_html=True)
 
                 else:
-                    st.warning("⚠️ No teeth detected (incisor, canine, molar, or premolar). Please upload a valid image.")
+                    st.error("⚠️ No teeth detected (incisor, canine, molar, or premolar). Please upload a valid image.")
             else:
-                st.warning("⚠️ Please upload a frontal view of the intraoral image to perform classification.")
+                st.error("⚠️ Please upload a frontal view of the intraoral image to perform classification.")
 
     with sub_intraselected[1]:
         # Streamlit app title
@@ -178,7 +178,7 @@ if selected == "Intraoral Classification":
 
         if st.button("Classify"):
             if uploaded_file is None:
-                st.warning("⚠️ Please upload a side view of the intraoral image to perform classification.")
+                st.error("⚠️ Please upload a side view of the intraoral image to perform classification.")
             else:
                 # Convert image to numpy array
                 image_np = np.array(image)
@@ -201,7 +201,7 @@ if selected == "Intraoral Classification":
 
                 # Check if any boxes are detected
                 if results[0].boxes.data.shape[0] == 0:
-                    st.warning("⚠️ No detections. Please upload a valid image.")
+                    st.error("⚠️ No detections. Please upload a valid image.")
                 else:
                     best_canine_box = None
                     best_molar_box = None
@@ -253,7 +253,7 @@ if selected == "Intraoral Classification":
                 # Output detected classes with styling
                 st.markdown("## 🦷 **Detected Classes：**")
                 if detected_classes["Canine"] is None and detected_classes["Molar"] is None:
-                    st.warning("⚠️ **No canine and molar detected.** Please upload a valid image.")
+                    st.error("⚠️ **No canine and molar detected.** Please upload a valid image.")
                 else:
                     if detected_classes["Canine"]:
                         st.markdown(
@@ -366,7 +366,7 @@ if selected == "Extraoral Classification":
 
                 if predicted_class is None:
                     # Display error message for irrelevant images
-                    st.error("No confident class detected. Please ensure the image is relevant and clear.")
+                    st.error("⚠️ **No confident class detected. Please ensure the image is relevant and clear.**")
                 else:
                     # Display the predicted class
                     st.markdown(
