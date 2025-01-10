@@ -6,16 +6,32 @@ from PIL import Image, ExifTags, ImageDraw, ImageFont
 from tensorflow.keras.models import load_model
 import pandas as pd
 
+# Set the page configuration
 st.set_page_config(layout="wide")
+
+# Initialize session state for page selection
+if "selected_page" not in st.session_state:
+    st.session_state.selected_page = "Home"
+
+# Sidebar menu
 with st.sidebar:
-    selected = streamlit_option_menu.option_menu(menu_title="Main Menu", options=["Home", "Intraoral Classification", "Extraoral Classification"], menu_icon="cast", default_index=0)
+    selected = streamlit_option_menu.option_menu(
+        menu_title="Main Menu",
+        options=["Home", "Intraoral Classification", "Extraoral Classification"],
+        menu_icon="cast",
+        default_index=0,
+    )
+    st.session_state.selected_page = selected
 
-if selected == "Home":
-    col1, col2, col3 = st.columns([1, 3, 1])
-    with col2:
-        st.image("images/home.jpg", use_column_width=True)
+placeholder = st.empty()
+if st.session_state.selected_page == "Home":
 
-    st.markdown("""
+    with placeholder.container():
+        col1, col2, col3 = st.columns([1, 3, 1])
+        with col2:
+            st.image("images/home.jpg", use_column_width=True)
+    st.markdown(
+        """
         <style>
             .title {
                 font-size: 28px;
@@ -68,12 +84,17 @@ if selected == "Home":
         </ol>
         <hr>
         <div class="note"><strong>Note:</strong> The system is trained using RGB images only.</div>
-        """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True,
+    )
 
-if selected == "Intraoral Classification":
+elif st.session_state.selected_page == "Intraoral Classification":
+    placeholder.empty()
+
     sub_intraselected = st.tabs(["Classification of Teeth", "Angle's Classification"])
 
     with sub_intraselected[0]:
+        placeholder = st.empty()
         st.title("Classification of Teeth")
 
         model = YOLO("model/intraoral_final_best.pt")
@@ -83,10 +104,12 @@ if selected == "Intraoral Classification":
             "canine": (255, 0, 0),  # Red
             "incisor": (0, 128, 0),  # Green
             "molar": (0, 0, 255),  # Blue
-            "premolar": (0, 255, 255)
+            "premolar": (0, 255, 255),
         }
 
-        intra_uploaded_file = st.file_uploader("Please upload a frontal/upper/lower view of intraoral image:", type=["jpg", "jpeg", "png"])
+        intra_uploaded_file = st.file_uploader(
+            "Please upload a frontal/upper/lower view of intraoral image:", type=["jpg", "jpeg", "png"]
+        )
         if intra_uploaded_file:
             intra_on = st.toggle("Show image")
             if intra_on:
@@ -94,6 +117,7 @@ if selected == "Intraoral Classification":
                 incol1, incol2, incol3 = st.columns([2, 3, 1])
                 with incol2:
                     st.image(intra_image, caption="Uploaded Image", width=600)
+
         if st.button("Classify Teeth"):
             if intra_uploaded_file is not None:
                 intra_image = Image.open(intra_uploaded_file).convert("RGB")
@@ -111,31 +135,31 @@ if selected == "Intraoral Classification":
                             color = class_colors.get(label, (255, 255, 255))
 
                             draw.rectangle([x_min, y_min, x_max, y_max], outline=color, width=3)
-                            font_size =40
+                            font_size = 40
                             font = ImageFont.truetype("font/arial.ttf", font_size)
-                            draw.text((x_min+2, y_min - 10), label, fill=color,font=font )
+                            draw.text((x_min + 2, y_min - 10), label, fill=color, font=font)
 
                 if detected:
                     ocol1, ocol2, ocol3 = st.columns([2, 3, 1])
                     with ocol2:
                         st.image(intra_image, caption="Predicted Image with Bounding Boxes", width=600)
-                    import streamlit as st
-
-                    # Use Markdown with HTML for centered, colored text
-                    st.markdown("""
-                    <div style="text-align: center;">
-                        <h3>Color Coding for Teeth Classification:</h3>
-                        <p><span style="color:green"><strong>Green</strong></span>: Incisor</p>
-                        <p><span style="color:red"><strong>Red</strong></span>: Canine</p>
-                        <p><span style="color:cyan"><strong>Cyan</strong></span>: Premolar</p>
-                        <p><span style="color:blue"><strong>Blue</strong></span>: Molar</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-
+                    st.markdown(
+                        """
+                        <div style="text-align: center;">
+                            <h3>Color Coding for Teeth Classification:</h3>
+                            <p><span style="color:green"><strong>Green</strong></span>: Incisor</p>
+                            <p><span style="color:red"><strong>Red</strong></span>: Canine</p>
+                            <p><span style="color:cyan"><strong>Cyan</strong></span>: Premolar</p>
+                            <p><span style="color:blue"><strong>Blue</strong></span>: Molar</p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
                 else:
                     st.error("⚠️ No teeth detected (incisor, canine, molar, or premolar). Please upload a valid image.")
             else:
                 st.error("⚠️ Please upload a frontal view of the intraoral image to perform classification.")
+
 
     with sub_intraselected[1]:
         # Streamlit app title
@@ -283,7 +307,7 @@ if selected == "Intraoral Classification":
                         st.markdown("<span style='color: #FF4B4B; font-weight: bold;'>❌ Molar: Not detected</span>",
                                     unsafe_allow_html=True)
 
-if selected == "Extraoral Classification":
+else:
     st.title("🧑‍⚕️Extraoral Orthodontic Images Classification👩‍⚕️")
 
     # Load the pre-trained model
