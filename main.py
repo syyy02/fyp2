@@ -23,13 +23,12 @@ with st.sidebar:
     )
     st.session_state.selected_page = selected
 
-placeholder = st.empty()
-if st.session_state.selected_page == "Home":
 
-    with placeholder.container():
-        col1, col2, col3 = st.columns([1, 3, 1])
-        with col2:
-            st.image("images/home.jpg", use_column_width=True)
+if st.session_state.selected_page == "Home":
+    st.empty()
+    col1, col2, col3 = st.columns([1, 3, 1])
+    with col2:
+        st.image("images/home.jpg", use_column_width=True)
     st.markdown(
         """
         <style>
@@ -89,12 +88,12 @@ if st.session_state.selected_page == "Home":
     )
 
 elif st.session_state.selected_page == "Intraoral Classification":
-    placeholder.empty()
+    st.empty()
 
-    sub_intraselected = st.tabs(["Classification of Teeth", "Angle's Classification"])
+    intra_tab1, intra_tab2 = st.tabs(["Classification of Teeth", "Angle's Classification"])
 
-    with sub_intraselected[0]:
-        placeholder = st.empty()
+    with intra_tab1:
+        st.empty()
         st.title("Classification of Teeth")
 
         model = YOLO("model/intraoral_final_best.pt")
@@ -161,7 +160,7 @@ elif st.session_state.selected_page == "Intraoral Classification":
                 st.error("⚠️ Please upload a frontal view of the intraoral image to perform classification.")
 
 
-    with sub_intraselected[1]:
+    with intra_tab2:
         # Streamlit app title
         st.title("Angle's Classification")
 
@@ -308,6 +307,7 @@ elif st.session_state.selected_page == "Intraoral Classification":
                                     unsafe_allow_html=True)
 
 else:
+    st.empty()
     st.title("🧑‍⚕️Extraoral Orthodontic Images Classification👩‍⚕️")
 
     # Load the pre-trained model
