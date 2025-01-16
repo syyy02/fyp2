@@ -273,37 +273,40 @@ elif st.session_state.selected_page == "Intraoral Classification":
                         #st.image(enlarged_image, caption="Detected Image with Bounding Boxes", use_column_width=True)
 
                 # Output detected classes with styling
-                st.markdown("## 🦷 **Detected Classes：**")
-                if detected_classes["Canine"] is None and detected_classes["Molar"] is None:
-                    st.error("⚠️ **No canine and molar detected.** Please upload a valid image.")
-                else:
-                    if detected_classes["Canine"]:
-                        st.markdown(
-                            f"""
-                            <div style='background-color: #DFF6FF; padding: 10px; border-radius: 10px; margin-bottom: 10px;'>
-                                <b>🟢 Canine Detected:</b> {detected_classes['Canine']}<br>
-                                <b>Confidence:</b> {max_confidence_canine:.2f}
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
+                #st.markdown("## 🦷 **Detected Classes：**")
+                    if detected_classes["Canine"] is None and detected_classes["Molar"] is None:
+                        st.error("⚠️ **No canine and molar detected.** Please upload a valid image.")
                     else:
-                        st.markdown("<span style='color: #FF4B4B; font-weight: bold;'>❌ Canine: Not detected</span>",
-                                    unsafe_allow_html=True)
+                        if detected_classes["Canine"]:
+                            st.markdown("## 🦷 **Detected Classes：**")
+                            st.markdown(
+                                f"""
+                                <div style='background-color: #DFF6FF; padding: 10px; border-radius: 10px; margin-bottom: 10px;'>
+                                    <b>🟢 Canine Detected:</b> {detected_classes['Canine']}<br>
+                                    <b>Confidence:</b> {max_confidence_canine:.2f}
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+                        else:
+                            st.markdown(
+                                "<span style='color: #FF4B4B; font-weight: bold;'>❌ Canine: Not detected</span>",
+                                unsafe_allow_html=True)
 
-                    if detected_classes["Molar"]:
-                        st.markdown(
-                            f"""
-                            <div style='background-color: #FFF7D6; padding: 10px; border-radius: 10px; margin-bottom: 10px;'>
-                                <b>🟡 Molar Detected:</b> {detected_classes['Molar']}<br>
-                                <b>Confidence:</b> {max_confidence_molar:.2f}
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
-                    else:
-                        st.markdown("<span style='color: #FF4B4B; font-weight: bold;'>❌ Molar: Not detected</span>",
-                                    unsafe_allow_html=True)
+                        if detected_classes["Molar"]:
+                            st.markdown(
+                                f"""
+                                <div style='background-color: #FFF7D6; padding: 10px; border-radius: 10px; margin-bottom: 10px;'>
+                                    <b>🟡 Molar Detected:</b> {detected_classes['Molar']}<br>
+                                    <b>Confidence:</b> {max_confidence_molar:.2f}
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+                        else:
+                            st.markdown("<span style='color: #FF4B4B; font-weight: bold;'>❌ Molar: Not detected</span>",
+                                        unsafe_allow_html=True)
+
 
 else:
     st.title("🧑‍⚕️Extraoral Orthodontic Images Classification👩‍⚕️")
