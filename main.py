@@ -5,6 +5,7 @@ from ultralytics import YOLO
 from PIL import Image, ExifTags, ImageDraw, ImageFont
 from tensorflow.keras.models import load_model
 import pandas as pd
+import time
 
 # Set the page configuration
 st.set_page_config(layout="wide")
@@ -139,7 +140,7 @@ elif st.session_state.selected_page == "Intraoral Classification":
                 if detected:
                     ocol1, ocol2, ocol3 = st.columns([2, 3, 1])
                     with ocol2:
-                        st.image(intra_image, caption="Predicted Image with Bounding Boxes", width=600)
+                        st.image(intra_image, caption="Predicted Image with Bounding Boxes", width=700)
                     st.markdown(
                         """
                         <div style="text-align: center;">
@@ -369,6 +370,7 @@ else:
 
         corrected_image = load_and_correct_image(uploaded_file)
         st.toast("Classifying...")
+        time.sleep(.2)
 
         if corrected_image is not None:
             # Display uploaded image
@@ -410,6 +412,9 @@ else:
                     st.markdown("<h4 style='text-align: left;'>Probability Breakdown:</h4>", unsafe_allow_html=True)
                     for class_name, probability in probabilities.items():
                         st.markdown(f"- **{class_name}**: {probability:.2f}")
+
+
+
 
 
 
