@@ -156,7 +156,7 @@ elif st.session_state.selected_page == "Intraoral Classification":
                 else:
                     st.error("⚠️ No teeth detected (incisor, canine, molar, or premolar). Please upload a valid image.")
             else:
-                st.error("⚠️ Please upload a frontal view of the intraoral image to perform classification.")
+                st.error("⚠️ Please upload a valid frontal/upper/lower view of the intraoral image to perform classification.")
 
 
     with sub_intraselected[1]:
